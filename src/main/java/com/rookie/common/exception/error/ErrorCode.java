@@ -76,8 +76,11 @@ public enum ErrorCode implements ErrorCodeInterface {
         USER_PASSWORD_IS_NOT_CORRECT(10104, "用户密码错误"),
         USER_PHONE_FORMAT_ERROR(10105, "用户手机号格式错误"),
 
-        // ------------------------------- ROLE ---------------------------------------------
-        ROLE_NAME_IS_NOT_UNIQUE(10201, "角色名称已存在");
+        // ------------------------------- ROLE ----------------------------------------------
+        ROLE_NAME_IS_NOT_UNIQUE(10201, "角色名称已存在"),
+
+        // ----------------------------- LOGIN -----------------------------------------
+        LOGIN_CAPTCHA_CODE_WRONG(10301, "验证码错误");
 
         private final int code;
         private final String msg;

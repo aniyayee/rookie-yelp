@@ -101,10 +101,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUserEntity
     }
 
     @Override
+    public SysUserDTO queryByPhone(String phone) {
+        QueryWrapper<SysUserEntity> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("phone", phone);
+        SysUserEntity entity = baseMapper.selectOne(queryWrapper);
+        return ObjectUtil.isNotEmpty(entity) ? BeanUtil.copyProperties(entity, SysUserDTO.class) : null;
+    }
+
+    @Override
     public boolean isPhoneDuplicated(String phone, Long userId) {
         QueryWrapper<SysUserEntity> queryWrapper = new QueryWrapper<>();
         queryWrapper.ne(userId != null, "user_id", userId)
             .eq("phone", phone);
         return baseMapper.exists(queryWrapper);
+    }
+
+    @Override
+    public SysUserDTO createDefaultUserWithPhone(String phone) {
+        SysUserEntity entity = new SysUserEntity();
+        String username = Constants.USER_NAME_PREFIX + RandomUtil.randomString(6);
+        entity.setUsername(username);
+        entity.setPhone(phone);
+        baseMapper.insert(entity);
+        return BeanUtil.copyProperties(entity, SysUserDTO.class);
     }
 }
