@@ -1,7 +1,7 @@
 package com.rookie.common.exception;
 
-import com.rookie.common.constants.ErrorCode;
 import com.rookie.common.core.dto.ResponseDTO;
+import com.rookie.common.exception.error.ErrorCode;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.validation.ConstraintViolationException;
@@ -54,28 +54,26 @@ public class GlobalExceptionHandler {
     /**
      * handle api exception.
      *
-     * @param apiException ApiException
+     * @param e ApiException
      * @return ResponseDTO
      */
     @ResponseBody
     @ExceptionHandler(ApiException.class)
-    public ResponseDTO<ApiException> processApiException(ApiException apiException) {
-        log.error(apiException.getLocalizedMessage());
-        return ResponseDTO.fail(null,
-            apiException.getLocalizedMessage() == null ? ErrorCode.HTTP_STATUS_500.getMsg()
-                : apiException.getLocalizedMessage());
+    public ResponseDTO<?> processApiException(ApiException e) {
+        log.error(e.getMessage(), e);
+        return ResponseDTO.fail(e, e.getPayload());
     }
 
     /**
      * handle other exception.
      *
-     * @param exception exception
-     * @return ResponseResult
+     * @param e Exception
+     * @return ResponseDTO
      */
     @ResponseBody
     @ExceptionHandler(Exception.class)
-    public ResponseDTO<Exception> processException(Exception exception) {
-        log.error(exception.getLocalizedMessage(), exception);
-        return ResponseDTO.fail(null, ErrorCode.HTTP_STATUS_500.getMsg());
+    public ResponseDTO<?> processException(Exception e) {
+        log.error(e.getMessage(), e);
+        return ResponseDTO.fail(new ApiException(ErrorCode.HTTP_STATUS_500));
     }
 }

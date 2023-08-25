@@ -1,7 +1,7 @@
 package com.rookie.common.core.dto;
 
-import com.rookie.common.constants.ErrorCode;
-import java.io.Serializable;
+import com.rookie.common.exception.ApiException;
+import com.rookie.common.exception.error.ErrorCode;
 import lombok.Builder;
 import lombok.Data;
 
@@ -20,7 +20,7 @@ public class ResponseDTO<T> {
     /**
      * response code, 200 -> OK.
      */
-    private String status;
+    private Integer status;
 
     /**
      * response message.
@@ -32,49 +32,32 @@ public class ResponseDTO<T> {
      */
     private T data;
 
-    /**
-     * response success result wrapper.
-     *
-     * @param <T> type of data class
-     * @return response result
-     */
-    public static <T> ResponseDTO<T> success() {
-        return success(null);
+    public static <T> ResponseDTO<T> ok() {
+        return build(null, ErrorCode.SUCCESS.code(), ErrorCode.SUCCESS.message());
     }
 
-    /**
-     * response success result wrapper.
-     *
-     * @param data response data
-     * @param <T> type of data class
-     * @return response result
-     */
-    public static <T> ResponseDTO<T> success(T data) {
-        return ResponseDTO.<T>builder().data(data).message(ErrorCode.SUCCESS.getMsg())
-            .status(ErrorCode.SUCCESS.getCode()).timestamp(System.currentTimeMillis()).build();
+    public static <T> ResponseDTO<T> ok(T data) {
+        return build(data, ErrorCode.SUCCESS.code(), ErrorCode.SUCCESS.message());
     }
 
-    /**
-     * response error result wrapper.
-     *
-     * @param message error message
-     * @param <T> type of data class
-     * @return response result
-     */
-    public static <T extends Serializable> ResponseDTO<T> fail(String message) {
-        return fail(null, message);
+    public static <T> ResponseDTO<T> fail() {
+        return build(null, ErrorCode.FAIL.code(), ErrorCode.FAIL.message());
     }
 
-    /**
-     * response error result wrapper.
-     *
-     * @param data response data
-     * @param message error message
-     * @param <T> type of data class
-     * @return response result
-     */
-    public static <T> ResponseDTO<T> fail(T data, String message) {
-        return ResponseDTO.<T>builder().data(data).message(message).status(ErrorCode.FAIL.getCode())
-            .timestamp(System.currentTimeMillis()).build();
+    public static <T> ResponseDTO<T> fail(T data) {
+        return build(data, ErrorCode.FAIL.code(), ErrorCode.FAIL.message());
+    }
+
+    public static <T> ResponseDTO<T> fail(ApiException exception) {
+        return build(null, exception.getErrorCode().code(), exception.getMessage());
+    }
+
+    public static <T> ResponseDTO<T> fail(ApiException exception, T data) {
+        return build(data, exception.getErrorCode().code(), exception.getMessage());
+    }
+
+    public static <T> ResponseDTO<T> build(T data, Integer code, String msg) {
+        return ResponseDTO.<T>builder().data(data).message(msg).status(code).timestamp(System.currentTimeMillis())
+            .build();
     }
 }

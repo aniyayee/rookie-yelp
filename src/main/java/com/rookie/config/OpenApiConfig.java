@@ -1,7 +1,7 @@
 package com.rookie.config;
 
 import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
-import com.rookie.common.constants.ErrorCode;
+import com.rookie.common.exception.error.ErrorCode;
 import io.swagger.annotations.ApiOperation;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,7 +68,7 @@ public class OpenApiConfig {
      */
     private List<Response> getGlobalResponse() {
         return ErrorCode.HTTP_STATUS_ALL.stream().map(
-                a -> new ResponseBuilder().code(a.getCode()).description(a.getMsg()).build())
+                a -> new ResponseBuilder().code(String.valueOf(a.code())).description(a.message()).build())
             .collect(Collectors.toList());
     }
 

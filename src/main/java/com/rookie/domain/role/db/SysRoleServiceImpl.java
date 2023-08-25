@@ -3,8 +3,8 @@ package com.rookie.domain.role.db;
 import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.rookie.common.constants.ErrorCode.Business;
 import com.rookie.common.exception.ApiException;
+import com.rookie.common.exception.error.ErrorCode.Business;
 import com.rookie.domain.role.command.AddRoleCommand;
 import com.rookie.domain.role.command.UpdateRoleCommand;
 import com.rookie.domain.role.dto.SysRoleDTO;
@@ -27,7 +27,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRoleEntity
     public void addRole(AddRoleCommand command) {
         SysRoleEntity entity = BeanUtil.copyProperties(command, SysRoleEntity.class);
         if (this.isRoleNameDuplicated(entity.getRoleName())) {
-            throw new ApiException(Business.ROLE_NAME_IS_NOT_UNIQUE.getMsg());
+            throw new ApiException(Business.ROLE_NAME_IS_NOT_UNIQUE);
         } else {
             baseMapper.insert(entity);
         }

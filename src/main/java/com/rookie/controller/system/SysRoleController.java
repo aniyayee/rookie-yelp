@@ -37,39 +37,39 @@ public class SysRoleController extends BaseController {
     @PostMapping("/add")
     public ResponseDTO<Void> add(@Valid @RequestBody AddRoleCommand command) {
         roleService.addRole(command);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Edit role")
     @PostMapping("/edit")
     public ResponseDTO<Void> edit(@Valid @RequestBody UpdateRoleCommand command) {
         roleService.updateRole(command);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Delete role")
     @GetMapping("/delete/{roleId}")
     public ResponseDTO<Void> deleteById(@PathVariable("roleId") Long roleId) {
         roleService.deleteById(roleId);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Query role By roleId")
     @GetMapping("/queryById/{roleId}")
     public ResponseDTO<SysRoleDTO> queryById(@PathVariable("roleId") Long roleId) {
-        return ResponseDTO.success(roleService.queryById(roleId));
+        return ResponseDTO.ok(roleService.queryById(roleId));
     }
 
     @ApiOperation("Query role List")
     @PostMapping("list")
     public ResponseDTO<List<SysRoleDTO>> list(RoleQuery roleQuery) {
-        return ResponseDTO.success(roleService.findList(roleQuery));
+        return ResponseDTO.ok(roleService.findList(roleQuery));
     }
 
     @ApiOperation("Query role By roleName")
     @GetMapping("/queryByRoleName/{roleName}")
     public ResponseDTO<SysRoleDTO> queryByRoleName(@PathVariable("roleName") String roleName) {
-        return ResponseDTO.success(roleService.queryByRoleName(roleName));
+        return ResponseDTO.ok(roleService.queryByRoleName(roleName));
     }
 }
 

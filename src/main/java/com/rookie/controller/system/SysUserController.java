@@ -38,46 +38,46 @@ public class SysUserController extends BaseController {
     @PostMapping("/add")
     public ResponseDTO<Void> add(@Valid @RequestBody AddUserCommand command) {
         userService.addUser(command);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Edit user")
     @PostMapping("/edit")
     public ResponseDTO<Void> edit(@Valid @RequestBody UpdateUserCommand command) {
         userService.updateUser(command);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Delete user")
     @GetMapping("/delete/{userId}")
     public ResponseDTO<Void> deleteById(@PathVariable("userId") Long userId) {
         userService.deleteById(userId);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Query user By userId")
     @GetMapping("/queryById/{userId}")
     public ResponseDTO<SysUserDTO> queryById(@PathVariable("userId") Long userId) {
-        return ResponseDTO.success(userService.queryById(userId));
+        return ResponseDTO.ok(userService.queryById(userId));
     }
 
     @ApiOperation("Query user List")
     @PostMapping("/list")
     public ResponseDTO<List<SysUserDTO>> list(UserQuery userQuery) {
-        return ResponseDTO.success(userService.findList(userQuery));
+        return ResponseDTO.ok(userService.findList(userQuery));
     }
 
     @ApiOperation("Update user password")
     @PostMapping("/password")
     public ResponseDTO<Void> updatePassword(@Valid @RequestBody UpdateUserPasswordCommand command) {
         userService.updatePassword(command);
-        return ResponseDTO.success();
+        return ResponseDTO.ok();
     }
 
     @ApiOperation("Query user By username")
     @GetMapping("/queryByUsername/{username}")
     public ResponseDTO<SysUserDTO> queryByUsername(@PathVariable("username") String username) {
-        return ResponseDTO.success(userService.queryByUsername(username));
+        return ResponseDTO.ok(userService.queryByUsername(username));
     }
 }
 
