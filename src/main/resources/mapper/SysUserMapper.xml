@@ -18,10 +18,11 @@
   </sql>
 
   <select id="findList" resultType="com.rookie.domain.user.dto.SysUserDTO">
+    <include refid="selectUserSql"/>
+    where u.deleted = 0
     <if test="username != null and username != ''">
       AND u.username like concat('%', #{username}, '%')
     </if>
-    where u.deleted = 0
     <if test="nickname != null and nickname != ''">
       AND u.nickname like concat('%', #{nickname}, '%')
     </if>
@@ -31,6 +32,5 @@
     <if test="phone != null and phone != ''">
       AND u.phone like concat('%', #{phone}, '%')
     </if>
-    <include refid="selectUserSql"/>
   </select>
 </mapper>
