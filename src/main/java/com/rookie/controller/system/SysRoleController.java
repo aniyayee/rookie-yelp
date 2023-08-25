@@ -8,6 +8,7 @@ import com.rookie.domain.role.command.UpdateRoleCommand;
 import com.rookie.domain.role.db.ISysRoleService;
 import com.rookie.domain.role.dto.SysRoleDTO;
 import com.rookie.domain.role.query.RoleQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.annotation.Resource;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author yayee
  */
+@Api(value = "Role Interfaces", tags = "Role Interfaces")
 @RestController
 @RequestMapping("/system/role")
 public class SysRoleController extends BaseController {

@@ -13,7 +13,7 @@ public class RookieApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RookieApplication.class, args);
-        System.out.println("(♥◠‿◠)ﾉﾞ   ROOKIE-YELP 启动成功   ლ(´ڡ`ლ)ﾞ");
+        System.out.println("(♥◠‿◠)ﾉﾞ   ROOKIE-YELP 启动成功   ლ(´ڡ`ლ)ﾞ ~ ~");
     }
 
 }

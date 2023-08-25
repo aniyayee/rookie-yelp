@@ -9,6 +9,7 @@ import com.rookie.domain.user.command.UpdateUserPasswordCommand;
 import com.rookie.domain.user.db.ISysUserService;
 import com.rookie.domain.user.dto.SysUserDTO;
 import com.rookie.domain.user.query.UserQuery;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import java.util.List;
 import javax.annotation.Resource;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
  *
  * @author yayee
  */
+@Api(value = "User Interfaces", tags = "User Interfaces")
 @RestController
 @RequestMapping("/system/user")
 public class SysUserController extends BaseController {
