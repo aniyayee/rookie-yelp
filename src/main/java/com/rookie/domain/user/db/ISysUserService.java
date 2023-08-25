@@ -31,7 +31,7 @@ public interface ISysUserService extends IService<SysUserEntity> {
 
     SysUserDTO queryByUsername(String username);
 
-    boolean isUserNameDuplicated(String username);
+    boolean isUserNameDuplicated(String username, Long userId);
 
-    boolean isPhoneNumberDuplicated(String phoneNumber, Long userId);
+    boolean isPhoneDuplicated(String phone, Long userId);
 }
