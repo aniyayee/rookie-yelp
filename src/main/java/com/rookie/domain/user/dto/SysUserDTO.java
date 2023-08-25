@@ -27,7 +27,7 @@ public class SysUserDTO {
     private String email;
 
     @ApiModelProperty("手机号码")
-    private String phoneNumber;
+    private String phone;
 
     @ApiModelProperty("备注")
     private String remark;

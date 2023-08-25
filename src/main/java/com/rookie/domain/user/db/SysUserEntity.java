@@ -49,8 +49,8 @@ public class SysUserEntity extends BaseEntity<SysUserEntity> {
     private String email;
 
     @ApiModelProperty("手机号码")
-    @TableField("phone_number")
-    private String phoneNumber;
+    @TableField("phone")
+    private String phone;
 
 
     @Override

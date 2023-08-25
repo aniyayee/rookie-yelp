@@ -19,5 +19,5 @@ public class UserQuery {
     private String email;
 
     @ApiModelProperty("手机号码")
-    private String phoneNumber;
+    private String phone;
 }

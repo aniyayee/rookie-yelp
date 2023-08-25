@@ -2,6 +2,21 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.rookie.domain.user.db.SysUserMapper">
+  <sql id="selectUserSql">
+    select u.user_id,
+           u.username,
+           u.password,
+           u.nickname,
+           u.email,
+           u.phone,
+           u.creator_id,
+           u.create_time,
+           u.updater_id,
+           u.update_time,
+           u.remark
+    from sys_user u
+  </sql>
+
   <select id="findList" resultType="com.rookie.domain.user.dto.SysUserDTO">
     <if test="username != null and username != ''">
       AND u.username like concat('%', #{username}, '%')
@@ -13,24 +28,9 @@
     <if test="email != null and email != ''">
       AND u.email like concat('%', #{email}, '%')
     </if>
-    <if test="phoneNumber != null and phoneNumber != ''">
-      AND u.phone_number like concat('%', #{phoneNumber}, '%')
+    <if test="phone != null and phone != ''">
+      AND u.phone like concat('%', #{phone}, '%')
     </if>
     <include refid="selectUserSql"/>
   </select>
-
-  <sql id="selectUserSql">
-    select u.user_id,
-           u.username,
-           u.password,
-           u.nickname,
-           u.email,
-           u.phone_number,
-           u.creator_id,
-           u.create_time,
-           u.updater_id,
-           u.update_time,
-           u.remark
-    from sys_user u
-  </sql>
 </mapper>

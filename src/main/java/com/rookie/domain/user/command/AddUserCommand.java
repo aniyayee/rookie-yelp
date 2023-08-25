@@ -35,10 +35,8 @@ public class AddUserCommand {
     @ApiModelProperty("手机号码")
     @NotEmpty(message = "could not be empty")
     @Pattern(regexp = "^1[3456789]\\d{9}$", message = "invalid phone")
-    private String phoneNumber;
+    private String phone;
 
     @ApiModelProperty("备注")
     private String remark;
 }
-
-
