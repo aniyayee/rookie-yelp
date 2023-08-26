@@ -6,6 +6,9 @@ import com.rookie.common.exception.error.ErrorCode.Business;
 import com.rookie.customize.service.login.LoginService;
 import com.rookie.customize.service.login.command.LoginCommand;
 import com.rookie.domain.user.command.AddUserCommand;
+import com.rookie.domain.user.db.ISysUserService;
+import com.rookie.domain.user.dto.SysUserDTO;
+import com.rookie.utils.CurrentUserHolder;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javax.annotation.Resource;
@@ -25,6 +28,9 @@ public class LoginController {
     @Resource
     private LoginService loginService;
 
+    @Resource
+    private ISysUserService userService;
+
     @ApiOperation("验证码")
     @GetMapping("/captcha/{phone}")
     public ResponseDTO<Void> getCaptcha(@PathVariable String phone) {
@@ -41,8 +47,9 @@ public class LoginController {
 
     @ApiOperation("获取当前登录用户信息")
     @GetMapping("/getLoginUserInfo")
-    public ResponseDTO<Void> getLoginUserInfo() {
-        return null;
+    public ResponseDTO<SysUserDTO> getLoginUserInfo() {
+        Long userId = CurrentUserHolder.getCurrentUser().getUserId();
+        return ResponseDTO.ok(userService.queryById(userId));
     }
 
     @ApiOperation("注册接口")

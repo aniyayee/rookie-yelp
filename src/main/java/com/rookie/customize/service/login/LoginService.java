@@ -32,7 +32,7 @@ public class LoginService {
     private StringRedisTemplate stringRedisTemplate;
 
     @Resource
-    private ISysUserService sysUserService;
+    private ISysUserService userService;
 
     public void generateCaptcha(String phone) {
         // 1.校验手机号
@@ -57,10 +57,10 @@ public class LoginService {
             throw new ApiException(Business.LOGIN_CAPTCHA_CODE_WRONG);
         }
         // 3.校验通过 查询用户是否注册
-        SysUserDTO userDTO = sysUserService.queryByPhone(phone);
+        SysUserDTO userDTO = userService.queryByPhone(phone);
         if (ObjectUtil.isEmpty(userDTO)) {
             // 4.用户不存在 创建默认用户
-            userDTO = sysUserService.createDefaultUserWithPhone(phone);
+            userDTO = userService.createDefaultUserWithPhone(phone);
         }
         // 5.保存用户信息到redis
         // 5.1 生成token
