@@ -1,5 +1,6 @@
 package com.rookie.config;
 
+import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -20,7 +21,7 @@ public class MyBatisConfig {
      */
     @Bean
     public PaginationInnerInterceptor paginationInnerInterceptor() {
-        return new PaginationInnerInterceptor();
+        return new PaginationInnerInterceptor(DbType.MYSQL);
     }
 
     /**

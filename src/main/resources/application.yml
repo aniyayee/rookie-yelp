@@ -39,3 +39,7 @@ knife4j:
     # models
     enableSwaggerModels: true
     swaggerModelName: My Models
+
+logging:
+  level:
+    com.rookie: debug
