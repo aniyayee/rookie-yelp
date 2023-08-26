@@ -3,6 +3,7 @@ package com.rookie.common.exception.error;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import org.springframework.util.Assert;
 
 /**
  * 错误码集合
@@ -59,8 +60,7 @@ public enum ErrorCode implements ErrorCodeInterface {
 
 
     /**
-     * 10000~99999 为业务逻辑 错误码 （无代码异常，代码正常流转，并返回提示给用户）
-     * 1XX01   XX是代表模块的意思 比如10101   01是Permission模块 错误码的命名最好以模块为开头
+     * 10000~99999 为业务逻辑 错误码 （无代码异常，代码正常流转，并返回提示给用户） 1XX01   XX是代表模块的意思 比如10101   01是Permission模块 错误码的命名最好以模块为开头
      * 比如OBJECT_NOT_FOUND前面加上COMMON = COMMON_OBJECT_NOT_FOUND
      */
     public enum Business implements ErrorCodeInterface {
@@ -86,6 +86,49 @@ public enum ErrorCode implements ErrorCodeInterface {
         private final String msg;
 
         Business(int code, String msg) {
+            this.code = code;
+            this.msg = msg;
+        }
+
+        @Override
+        public int code() {
+            return this.code;
+        }
+
+        @Override
+        public String message() {
+            return this.msg;
+        }
+    }
+
+    /**
+     * 0~99是内部错误码  例如 框架内部问题之类的
+     */
+    public enum Internal implements ErrorCodeInterface {
+        /**
+         * 内部错误码
+         */
+        INVALID_PARAMETER(1, "参数异常：{}"),
+
+        /**
+         * 该错误主要用于返回  未知的异常（大部分是RuntimeException） 程序未能捕获 未能预料的错误
+         */
+        INTERNAL_ERROR(2, "系统内部错误：{}"),
+
+        GET_ENUM_FAILED(3, "获取枚举类型失败, 枚举类：{}"),
+
+        GET_CACHE_FAILED(4, "获取缓存失败：{}"),
+
+        DB_INTERNAL_ERROR(5, "数据库异常"),
+
+        ;
+
+        private final int code;
+        private final String msg;
+
+        Internal(int code, String msg) {
+            Assert.isTrue(code < 100,
+                "错误码code值定义失败，Internal错误码code值范围在0~999之间，请查看ErrorCode.Internal类，当前错误码码为" + name());
             this.code = code;
             this.msg = msg;
         }
