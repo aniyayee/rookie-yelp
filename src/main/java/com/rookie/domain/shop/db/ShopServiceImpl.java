@@ -4,12 +4,19 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rookie.common.constants.RedisConstants;
+import com.rookie.common.core.page.PageDTO;
 import com.rookie.common.exception.ApiException;
 import com.rookie.common.exception.error.ErrorCode.Business;
+import com.rookie.domain.shop.command.AddShopCommand;
+import com.rookie.domain.shop.command.UpdateShopCommand;
 import com.rookie.domain.shop.dto.ShopDTO;
+import com.rookie.domain.shop.query.ShopQuery;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -28,7 +35,14 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, ShopEntity> impleme
     private StringRedisTemplate stringRedisTemplate;
 
     @Override
-    public ShopDTO queryById(Long id) {
+    public PageDTO<ShopDTO> getShopList(ShopQuery query) {
+        Page<ShopEntity> page = this.page(query.toPage(), query.toQueryWrapper());
+        List<ShopDTO> records = page.getRecords().stream().map(ShopDTO::new).collect(Collectors.toList());
+        return new PageDTO<>(page.getTotal(), records);
+    }
+
+    @Override
+    public ShopDTO getShopInfo(Long id) {
         // 1.查询redis缓存
         String shopKey = RedisConstants.CACHE_SHOP_KEY + id;
         String shopJson = stringRedisTemplate.opsForValue().get(shopKey);
@@ -47,5 +61,21 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, ShopEntity> impleme
         stringRedisTemplate.opsForValue()
             .set(shopKey, JSONUtil.toJsonStr(dto), RedisConstants.CACHE_SHOP_TTL, TimeUnit.SECONDS);
         return dto;
+    }
+
+    @Override
+    public void addShop(AddShopCommand command) {
+        ShopEntity entity = BeanUtil.copyProperties(command, ShopEntity.class);
+        baseMapper.insert(entity);
+    }
+
+    @Override
+    public void updateShop(UpdateShopCommand command) {
+
+    }
+
+    @Override
+    public void deleteById(Long id) {
+
     }
 }
