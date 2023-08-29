@@ -28,5 +28,5 @@ public interface ISysRoleService extends IService<SysRoleEntity> {
 
     SysRoleDTO queryByRoleName(String roleName);
 
-    boolean isRoleNameDuplicated(String roleName);
+    boolean isRoleNameDuplicated(String roleName, Long roleId);
 }
