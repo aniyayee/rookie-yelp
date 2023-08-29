@@ -50,13 +50,18 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, ShopEntity> impleme
             // 2.命中 返回
             return JSONUtil.toBean(shopJson, ShopDTO.class);
         }
-        // 3.未命中 查数据库
+        // 3.判断空值
+        if (StrUtil.equals("", shopJson)) {
+            return null;
+        }
+        // 4.非空值 查数据库
         ShopEntity entity = baseMapper.selectById(id);
         if (ObjectUtil.isEmpty(entity)) {
-            // 4.不存在 返回错误信息
+            // 5.不存在 返回错误信息 记录空值
+            stringRedisTemplate.opsForValue().set(shopKey, "", RedisConstants.CACHE_NULL_TTL, TimeUnit.SECONDS);
             throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "商铺");
         }
-        // 5.存在 存入缓存 返回
+        // 6.存在 存入缓存 返回
         ShopDTO dto = BeanUtil.copyProperties(entity, ShopDTO.class);
         stringRedisTemplate.opsForValue()
             .set(shopKey, JSONUtil.toJsonStr(dto), RedisConstants.CACHE_SHOP_TTL, TimeUnit.SECONDS);

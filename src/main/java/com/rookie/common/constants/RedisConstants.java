@@ -14,4 +14,6 @@ public class RedisConstants {
     public static final Long CACHE_SHOP_TTL = 3600L;
     public static final String CACHE_SHOP_TYPE_KEY = "cache:shopType:all";
     public static final Long CACHE_SHOP_TYPE_TTL = 36000L;
+
+    public static final Long CACHE_NULL_TTL = 30L;
 }
