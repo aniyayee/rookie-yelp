@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 import javax.annotation.Resource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -74,13 +75,27 @@ public class ShopServiceImpl extends ServiceImpl<ShopMapper, ShopEntity> impleme
         baseMapper.insert(entity);
     }
 
+    @Transactional
     @Override
     public void updateShop(UpdateShopCommand command) {
-
+        Long id = command.getId();
+        ShopEntity byId = baseMapper.selectById(id);
+        if (ObjectUtil.isEmpty(byId)) {
+            throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "商铺");
+        }
+        String shopKey = RedisConstants.CACHE_SHOP_KEY + id;
+        ShopEntity entity = BeanUtil.copyProperties(command, ShopEntity.class);
+        // 1.更新数据库
+        baseMapper.updateById(entity);
+        // 2.删除缓存
+        stringRedisTemplate.delete(shopKey);
     }
 
+    @Transactional
     @Override
     public void deleteById(Long id) {
-
+        String shopKey = RedisConstants.CACHE_SHOP_KEY + id;
+        baseMapper.deleteById(id);
+        stringRedisTemplate.delete(shopKey);
     }
 }
