@@ -5,7 +5,10 @@ import cn.hutool.core.util.ObjectUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.rookie.common.constants.RedisConstants;
 import com.rookie.common.exception.ApiException;
+import com.rookie.common.exception.error.ErrorCode.Business;
 import com.rookie.common.exception.error.ErrorCode.Internal;
+import com.rookie.domain.shoptype.command.AddShopTypeCommand;
+import com.rookie.domain.shoptype.command.UpdateShopTypeCommand;
 import com.rookie.domain.shoptype.dto.ShopTypeDTO;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -13,6 +16,7 @@ import javax.annotation.Resource;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * <p>
@@ -47,8 +51,46 @@ public class ShopTypeServiceImpl extends ServiceImpl<ShopTypeMapper, ShopTypeEnt
         }
         // 5.存在 存入缓存 返回
         List<ShopTypeDTO> dtoList = BeanUtil.copyToList(entityList, ShopTypeDTO.class);
-        opsForList.leftPushAll(shopTypeKey, dtoList);
-        redisTemplate.expire(shopTypeKey, RedisConstants.CACHE_SHOP_TYPE_TTL, TimeUnit.SECONDS);
+        List<String> stringList = dtoList.stream().map(JSONUtil::toJsonStr).collect(Collectors.toList());
+        stringRedisTemplate.opsForList().rightPushAll(shopTypeKey, stringList);
+        stringRedisTemplate.expire(shopTypeKey, RedisConstants.CACHE_SHOP_TYPE_TTL, TimeUnit.SECONDS);
         return dtoList;
+    }
+
+    @Override
+    public ShopTypeDTO getShopTypeInfo(Long id) {
+        ShopTypeEntity entity = baseMapper.selectById(id);
+        if (ObjectUtil.isEmpty(entity)) {
+            throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "商铺类型");
+        }
+        return BeanUtil.copyProperties(entity, ShopTypeDTO.class);
+    }
+
+    @Override
+    public void addShopType(AddShopTypeCommand command) {
+        ShopTypeEntity entity = BeanUtil.copyProperties(command, ShopTypeEntity.class);
+        baseMapper.insert(entity);
+    }
+
+    @Transactional
+    @Override
+    public void updateShopType(UpdateShopTypeCommand command) {
+        Long id = command.getId();
+        ShopTypeEntity byId = baseMapper.selectById(id);
+        if (ObjectUtil.isEmpty(byId)) {
+            throw new ApiException(Business.COMMON_OBJECT_NOT_FOUND, id, "商铺类型");
+        }
+        String shopTypeKey = RedisConstants.CACHE_SHOP_TYPE_KEY;
+        ShopTypeEntity entity = BeanUtil.copyProperties(command, ShopTypeEntity.class);
+        baseMapper.updateById(entity);
+        stringRedisTemplate.delete(shopTypeKey);
+    }
+
+    @Transactional
+    @Override
+    public void deleteById(Long id) {
+        String shopTypeKey = RedisConstants.CACHE_SHOP_TYPE_KEY;
+        baseMapper.deleteById(id);
+        stringRedisTemplate.delete(shopTypeKey);
     }
 }
