@@ -43,3 +43,14 @@ knife4j:
 logging:
   level:
     com.rookie: debug
+
+# 项目相关配置
+yelp:
+  # 名称
+  name: Yelp
+  # 版本
+  version: 1.0.0
+  # 版权年份
+  copyright-year: 2023
+  # 文件基路径 示例（ Windows配置D:\yelp，Linux配置 /home/yelp）
+  file-base-dir: Y:\yelp

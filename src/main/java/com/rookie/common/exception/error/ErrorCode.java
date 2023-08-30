@@ -68,6 +68,7 @@ public enum ErrorCode implements ErrorCodeInterface {
         // ------------------------------- COMMON -------------------------------------------
         COMMON_OBJECT_NOT_FOUND(10001, "找不到ID为 {} 的 {}"),
         COMMON_UNSUPPORTED_OPERATION(10002, "不支持的操作"),
+        COMMON_FILE_NOT_ALLOWED_TO_DOWNLOAD(10003, "文件名称({})非法，不允许下载"),
 
         // ------------------------------- USER ---------------------------------------------
         USER_NAME_IS_NOT_UNIQUE(10101, "用户名已被其他用户占用"),
@@ -75,12 +76,22 @@ public enum ErrorCode implements ErrorCodeInterface {
         USER_NEW_PASSWORD_IS_THE_SAME_AS_OLD(10103, "用户新密码与旧密码相同"),
         USER_PASSWORD_IS_NOT_CORRECT(10104, "用户密码错误"),
         USER_PHONE_FORMAT_ERROR(10105, "用户手机号格式错误"),
+        USER_UPLOAD_FILE_FAILED(10106, "用户上传文件失败"),
 
         // ------------------------------- ROLE ----------------------------------------------
         ROLE_NAME_IS_NOT_UNIQUE(10201, "角色名称已存在"),
 
         // ----------------------------- LOGIN -----------------------------------------
-        LOGIN_CAPTCHA_CODE_WRONG(10301, "验证码错误");
+        LOGIN_CAPTCHA_CODE_WRONG(10301, "验证码错误"),
+        LOGIN_ERROR(10302, "登录失败：{}"),
+
+        // ----------------------------- UPLOAD -----------------------------------------
+        UPLOAD_FILE_TYPE_NOT_ALLOWED(10401, "不允许上传的文件类型，仅允许：{}"),
+        UPLOAD_FILE_NAME_EXCEED_MAX_LENGTH(10402, "文件名长度超过：{} "),
+        UPLOAD_FILE_SIZE_EXCEED_MAX_SIZE(10403, "文件名大小超过：{} MB"),
+        UPLOAD_IMPORT_EXCEL_FAILED(10404, "导入excel失败：{}"),
+        UPLOAD_FILE_IS_EMPTY(10405, "上传文件为空"),
+        UPLOAD_FILE_FAILED(10406, "上传文件失败：{}");
 
         private final int code;
         private final String msg;
