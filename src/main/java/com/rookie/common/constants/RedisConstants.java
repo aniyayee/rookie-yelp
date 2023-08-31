@@ -16,4 +16,6 @@ public class RedisConstants {
     public static final Long CACHE_SHOP_TYPE_TTL = 36000L;
 
     public static final Long CACHE_NULL_TTL = 30L;
+
+    public static final String BLOG_LIKED_KEY = "blog:liked:";
 }
